@@ -1,0 +1,59 @@
+@import "../App.css";
+
+.card-button {
+  width: 70px;
+  height: 30px;
+  appearance: none;
+  background-color: #000000;
+  border: 2px solid #1A1A1A;
+  border-radius: 15px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  
+  display: inline-flex;
+  flex-direction: column;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: normal;
+  margin: 0;
+  outline: none;
+  align-items: center;
+  transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+}
+
+
+.closed-card {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 180px;
+  height: 100px;
+  padding: 10px;
+  border-radius: 20px;
+  background-color: #5192d6;
+  border: 10px red;
+  font-size: 20px;
+  font-weight: 700;
+  
+  transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+  cursor: pointer;
+}
+
+.closed-card:disabled {
+  pointer-events: none;
+}
+
+.closed-card:hover {
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
+}
+
+.closed-card:active {
+  box-shadow: none;
+  transform: translateY(0);
+}
+
+.open-card {
+  
+  }
