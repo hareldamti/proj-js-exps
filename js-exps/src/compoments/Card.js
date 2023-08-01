@@ -7,13 +7,33 @@ const Card = ({experiment, config}) => {
     const canvasRef = useRef();
     const animationRequest = useRef();
     experiment.config = {...experiment.config, ...config};
+
+    
+
     useEffect(()=> {
         if (!open) return;
         let canvas = canvasRef.current;
+        canvas.addEventListener('mousedown', e=>{
+            experiment.env.input.mouse = {
+                down: true,
+                p: [e.pageX, e.pageY],
+                v: [0, 0]
+            }
+        });
+        canvas.addEventListener('mousemove', e=>{
+            let prev = experiment.env.input.mouse.p;
+            experiment.env.input.mouse.v = [e.pageX - prev[0], e.pageY - prev[1]];
+            experiment.env.input.mouse.p = [e.pageX, e.pageY];
+        });
+        canvas.addEventListener('mouseup', e=>{
+            experiment.env.input.mouse.down = false;
+        });
         let context = canvas.getContext('2d');
         let animationFrameId;
+        experiment.init(experiment.system, experiment.config, context);
         const render = () => {
-            experiment.draw(experiment.system, experiment.config, context);
+            experiment.update(experiment.env, experiment.system, experiment.config);
+            experiment.draw( experiment.system, experiment.config, context);
             animationFrameId = window.requestAnimationFrame(render);
         }
         animationFrameId = window.requestAnimationFrame(render);

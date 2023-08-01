@@ -2,17 +2,24 @@ import { useEffect, useState } from "react";
 
 var defaultConfig = {
     width: 800,
-    height: 400
+    height: 400,
+    n: 20
 }
 
 var Particles = {
     name: "Particles",
     config: defaultConfig,
+    env: {},
     system: {
-        t: 0
+        t: 0,
+        p: new Array(defaultConfig.n)
     },
-    init: (system, config) => {},
-    update: (system, config) => {},
+    init: (system, config, ctx) => {
+        
+    },
+    update: (env, system, config) => {
+
+    },
     draw: (system, config, ctx) => {
         system.t+=1;
         ctx.fillStyle = "#000000";
