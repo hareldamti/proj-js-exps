@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { Vec3, Canvas } from "../utils/vec3";
-
+import {circle } from "../utils/draw";
+import { RGBA } from "../utils/rgba";
 var defaultConfig = {
     width: 800,
     height: 400,
-    n: 800
+    n: 4000
 }
 var defaultEnv = {
     input: {
@@ -33,6 +34,7 @@ var Sphere = {
     init: (system, config, ctx) => {
         ctx.fillStyle = "#000000";
         ctx.fillRect(0, 0, config.width, config.height);
+        system.p = [...system.p,[0,0],[Math.PI, 0], [Math.PI/2, 0],[Math.PI/2, Math.PI/2],[Math.PI/2, Math.PI],[Math.PI/2, -Math.PI/2]];
     },
     update: (env, system, config) => {
         system.t+=1;
@@ -40,9 +42,10 @@ var Sphere = {
             let p_ = system.c.fromCanvas(env.input.mouse.p).mul(0.01);
             system.rot_v = [system.rot_v[0] + p_.x, system.rot_v[1] + p_.y]
         }
+        system.rot_v = [0, 0.3];
         system.rot = [system.rot[0] + system.rot_v[0] *0.01, system.rot[1] + system.rot_v[1] *0.01];
-        system.rot_v = [system.rot_v[0] * .994, system.rot_v[1]*.994 + .006];
-
+        //system.rot_v = [system.rot_v[0] * .994, system.rot_v[1]*.994 + .006];
+        
         let a = Math.acos(Math.random() * 2 - 1), b = Math.random()*Math.PI*2;
         if (system.p.length < config.n) {
             system.p.push([a,b]);
@@ -56,19 +59,17 @@ var Sphere = {
         ctx.fillStyle = "rgba(0,0,0,0.1)";
         ctx.fillRect(0, 0, config.width, config.height);
         let coord = (p) => 
-        system.c.toCanvas(proj2d(Vec3.spherical(1,p[0],p[1]),4));
+        system.c.toCanvas(proj2d(Vec3.spherical(1,p[0],p[1]),1.5));
     
         for (let i = 0; i < system.p.length; i++) {
             let p = system.p[i];
             //p[0]-=0.004;
             //if (p[0] < 0) p[0]+=Math.PI;
             let p_ = coord(system.translate(p, system.rot));
-            ctx.fillStyle = `rgb(${p[0]*255/Math.PI},
-                                 ${p[1]*255/Math.PI/2},
-                                 ${255-p[0]*255/Math.PI/2-p[1]*255/Math.PI/2/2})`;
-            ctx.beginPath();
-            ctx.arc(p_[0], p_[1], 2, 0, 2 * Math.PI);
-            ctx.fill();
+
+            var rgb = Vec3.spherical(255, p[0]%(Math.PI/2), p[1]%(Math.PI/2));
+            circle(ctx, p_,1, new RGBA(rgb.x, rgb.y, rgb.z, 1));
+            
         }
         
         
