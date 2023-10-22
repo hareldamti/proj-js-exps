@@ -13,17 +13,20 @@ const Card = ({experiment, config}) => {
     useEffect(()=> {
         if (!open) return;
         let canvas = canvasRef.current;
+        let p = (e) => { return [e.clientX - e.target.getBoundingClientRect().left, e.clientY - e.target.getBoundingClientRect().top]; }
         canvas.addEventListener('mousedown', e=>{
             experiment.env.input.mouse = {
                 down: true,
-                p: [e.pageX, e.pageY],
+                p: p(e),
                 v: [0, 0]
-            }
+            };
         });
         canvas.addEventListener('mousemove', e=>{
             let prev = experiment.env.input.mouse.p;
-            experiment.env.input.mouse.v = [e.pageX - prev[0], e.pageY - prev[1]];
-            experiment.env.input.mouse.p = [e.pageX, e.pageY];
+            experiment.env.input.mouse.p = p(e);
+            experiment.env.input.mouse.v = [0, 1].map( i => experiment.env.input.mouse.p[i] - prev[i] );
+            
+            
         });
         canvas.addEventListener('mouseup', e=>{
             experiment.env.input.mouse.down = false;
